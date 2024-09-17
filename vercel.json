@@ -1,15 +1,5 @@
-{
-    "version": 2,
-    "builds": [
-      {
-        "src": "ligar.py",
-        "use": "@vercel/python"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "ligar.py"
-      }
-    ]
+{ 
+    "rewrites" :  [ 
+      {  "source" :  "/(.*)" ,  "destination" :  "/ligar.py"  } 
+    ] 
 }
