@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StickX Bypass</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        h1 {
+            color: #7289da;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #7289da;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #677bc4;
+        }
+        .embed {
+            border-radius: 5px;
+            background-color: #36393f;
+            color: #ffffff;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .embed-title {
+            font-weight: bold;
+            color: #7289da;
+        }
+        .embed-description {
+            color: #ffffff;
+        }
+        .embed-error {
+            color: #ff0000;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        .discord-btn {
+            background-color: #7289da;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .discord-btn:hover {
+            background-color: #677bc4;
+        }
+    </style>
+    <script>
+        function displayEmbed(data) {
+            var embed = document.createElement("div");
+            embed.className = "embed";
+            
+            var title = document.createElement("div");
+            title.className = "embed-title";
+            title.innerText = "Resultado do Bypass:";
+            embed.appendChild(title);
+            
+            var description = document.createElement("div");
+            description.className = "embed-description";
+            description.innerText = data.message;
+            embed.appendChild(description);
+            
+            document.getElementById("embedResult").appendChild(embed);
+        }
+
+        function bypass() {
+            var api = document.getElementById("bypassSelect").value;
+            var apiKey = 'E99l9NOctud3vmu6bPne';
+            var key = new URLSearchParams(window.location.search).get('key');
+            var value = document.getElementById("value").value;
+
+            if (key === null || key.trim() === "") {
+                displayEmbed({ message: "Erro: Chave de acesso não encontrada." });
+                return;
+            }
+
+            var param;
+
+            if (api.includes("${hwid}")) {
+                param = "hwid";
+            } else if (api.includes("${token}")) {
+                param = "token";
+            } else if (api.includes("${id}")) {
+                param = "id";
+            } else {
+                // Se não for encontrado nenhum parâmetro, mostrar mensagem de erro
+                displayEmbed({ message: "Erro: Parâmetro não detectado na URL do bypass." });
+                return;
+            }
+
+            var url = api.replace("{" + param + "}", value).replace("{api_key}", apiKey);
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.key) {
+                    displayEmbed({ message: "Sua chave: " + data.key });
+                } else {
+                    displayEmbed({ message: "Bypass falhou." });
+                }
+                document.getElementById("resetBtn").style.display = "block";
+            })
+            .catch(error => {
+                displayEmbed({ message: "Erro: " + error });
+                document.getElementById("resetBtn").style.display = "block";
+            });
+        }
+
+        function resetResult() {
+            document.getElementById("embedResult").innerHTML = "";
+            document.getElementById("resetBtn").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <h1>Start Bypass</h1>
+    <div class="container">
+        <label for="bypassSelect">Selecionar Bypass:</label>
+        <select id="bypassSelect" name="bypassSelect">
+            <option value="https://stickx.top/api-arceusx/?hwid=${hwid}&api_key={api_key}">Arceus (HWID)</option>
+            <option value="https://stickx.top/api-codex/?token=${token}&api_key={api_key}">Codex (Token)</option>
+            <option value="https://stickx.top/api-hydrogen/?hwid=${hwid}&api_key={api_key}">Hydrogen (HWID)</option>
+            <option value="https://stickx.top/api-hohohubv/?hwid=${hwid}&api_key={api_key}">HoHoHubv (HWID)</option>
+            <option value="https://stickx.top/api-trigon/?hwid=${hwid}&api_key={api_key}">TrigonEvo (HWID)</option>
+            <option value="https://stickx.top/api-delta/?hwid=${hwid}&api_key={api_key}">Delta (HWID)</option>
+            <option value="https://stickx.top/api-vegax/?id=${id}&api_key={api_key}">VegaX (ID)</option>
+        </select>
+        <br><br>
+        <label for="value">Envie o Link Para Ativar A Key:</label>
+        <input type="text" id="value" name="value" required>
+        <br><br>
+        <button onclick="bypass()">Bypass</button>
+        <br><br>
+        <div id="embedResult"></div>
+        <button id="resetBtn" style="display: none;" onclick="resetResult()">Resetar</button>
+    </div>
+
+    <hr>
+
+    <h2>Discord Support</h2>
+    <button class="discord-btn" onclick="window.open('https://discord.com/invite/kfbfiFi', '_blank')">Entrar no Discord(EmBreve)</button>
+</body>
+</html>

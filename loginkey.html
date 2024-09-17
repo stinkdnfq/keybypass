@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Key - StickX Bypass</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        h1 {
+            color: #7289da;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #7289da;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #677bc4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Key - Start Bypass</h1>
+    <div class="container">
+        <p>Insira a chave abaixo para acessar:</p>
+        <input type="text" id="key" name="key" required>
+        <br><br>
+        <button onclick="checkKey()">Acessar Bypass</button>
+    </div>
+
+    <script>
+        function checkKey() {
+            var keyInput = document.getElementById("key").value.trim();
+            fetch('pasword.txt')
+                .then(response => response.text())
+                .then(keyFile => {
+                    var keys = keyFile.trim().split('\n');
+                    var storedKeyIndex = keys.indexOf(keyInput);
+                    if (storedKeyIndex !== -1) {
+                        keys.splice(storedKeyIndex, 1); // Remove a chave utilizada
+                        var updatedKeys = keys.join('\n');
+                        fetch('update_key.php', {
+                            method: 'POST',
+                            body: updatedKeys
+                        })
+                        .then(() => {
+                            window.location.href = "startbypass.html?key=" + keyInput;
+                        })
+                        .catch(error => console.error('Erro ao atualizar as chaves:', error));
+                    } else {
+                        alert("Chave expirada. Por favor, insira uma chave válida.");
+                    }
+                })
+                .catch(error => console.error('Erro ao carregar a chave:', error));
+        }
+    </script>
+</body>
+</html>
